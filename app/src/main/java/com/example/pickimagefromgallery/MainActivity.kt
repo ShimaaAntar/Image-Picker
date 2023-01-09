@@ -1,30 +1,32 @@
 package com.example.pickimagefromgallery
 
 import android.Manifest
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.pickimagefromgallery.databinding.ActivityMainBinding
 import com.example.todo.base.BaseActivity
 
 class MainActivity : BaseActivity() {
+    lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         if(isPermissionGranted()){
             getPhoto()
         }
         else{
             requestLocationPermissionFromUser()
         }
-    }
-
-    private fun getPhoto() {
-        TODO("Not yet implemented")
     }
 
     val requestPermissionLauncher =
@@ -74,7 +76,21 @@ class MainActivity : BaseActivity() {
 
     }
 
+    fun getPhoto(){
+        binding.but1.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            resultLauncher.launch(intent)
 
+        }
+    }
 
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val data: Intent? = result.data
+        if (result.resultCode == Activity.RESULT_OK&&data!=null) {
+            val selectedImage=data.data
+            binding.image.setImageURI(selectedImage)
+            // There are no request codes
+        }
+    }
 
 }
