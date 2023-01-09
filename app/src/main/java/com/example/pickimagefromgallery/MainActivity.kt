@@ -34,16 +34,9 @@ class MainActivity : BaseActivity() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                // Permission is granted. Continue the action or workflow in your
-                // app.
                 getPhoto()
 
             } else {
-                // Explain to the user that the feature is unavailable because the
-                // feature requires a permission that the user has denied. At the
-                // same time, respect the user's decision. Don't link to system
-                // settings in an effort to convince the user to change their
-                // decision.
                 Toast.makeText(this,"can't App work without permission ", Toast.LENGTH_LONG).show()
             }
     }
@@ -72,7 +65,6 @@ class MainActivity : BaseActivity() {
     private fun isPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(this,
             Manifest.permission.READ_MEDIA_IMAGES)== PackageManager.PERMISSION_GRANTED
-        //&& ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED
 
     }
 
